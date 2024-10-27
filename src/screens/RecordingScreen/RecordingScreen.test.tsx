@@ -1,8 +1,6 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react-native";
 import RecordingScreen from "./RecordingScreen";
-import SpeechTextDisplayCard from "@features/recording/components/SpeechTextDisplayCard/SpeechTextDisplayCard";
-import CustomButton from "@components/CustomButton/CustomButton";
 import useSpeechToText from "@features/recording/hooks/useSpeechToText";
 
 // Mock the useSpeechToText hook

@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import React, { useCallback } from "react";
 import styles from "./RecordingScreen.styles";
 import CustomButton from "@components/CustomButton/CustomButton";
