@@ -9,7 +9,7 @@ import {
 
 import styles from "./CustomButton.styles";
 
-interface CustomButtonProps {
+interface ICustomButton {
   title: string;
   onPress: () => void;
   width?: DimensionValue;
@@ -17,7 +17,7 @@ interface CustomButtonProps {
   isDisabled?: boolean;
 }
 
-const CustomButton: React.FC<CustomButtonProps> = ({
+const CustomButton: React.FC<ICustomButton> = ({
   title,
   onPress,
   width,

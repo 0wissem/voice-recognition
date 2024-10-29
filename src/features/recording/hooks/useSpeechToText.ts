@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Voice, {
   SpeechResultsEvent,
   SpeechErrorEvent,
 } from "@react-native-voice/voice";
 
 // Define a type for the hook's return value
-interface UseSpeechToText {
+interface IUseSpeechToText {
   isListening: boolean;
   recognizedText: string;
   error: string | null;
@@ -13,7 +13,7 @@ interface UseSpeechToText {
   stopRecording: () => Promise<void>;
 }
 
-export default function useSpeechToText(): UseSpeechToText {
+export default function useSpeechToText(): IUseSpeechToText {
   const [isListening, setIsListening] = useState<boolean>(false);
   const [recognizedText, setRecognizedText] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
@@ -40,7 +40,6 @@ export default function useSpeechToText(): UseSpeechToText {
 
   const onSpeechPartialResults = (event: SpeechResultsEvent) => {
     if (event.value && event.value.length > 0) {
-      console.log(event.value[0]);
       setRecognizedText(event.value[0]);
     }
   };
@@ -56,7 +55,7 @@ export default function useSpeechToText(): UseSpeechToText {
     setIsListening(false);
   };
 
-  const startRecording = async () => {
+  const startRecording = useCallback(async () => {
     try {
       setRecognizedText("");
       setError(null);
@@ -66,9 +65,9 @@ export default function useSpeechToText(): UseSpeechToText {
       setError(err instanceof Error ? err.message : "An error occurred");
       console.error("Error starting voice recognition:", err);
     }
-  };
+  }, []);
 
-  const stopRecording = async () => {
+  const stopRecording = useCallback(async () => {
     try {
       await Voice.stop();
       setIsListening(false);
@@ -76,7 +75,7 @@ export default function useSpeechToText(): UseSpeechToText {
       setError(err instanceof Error ? err.message : "An error occurred");
       console.error("Error stopping voice recognition:", err);
     }
-  };
+  }, []);
 
   return {
     isListening,

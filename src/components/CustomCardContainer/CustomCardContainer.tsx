@@ -1,14 +1,12 @@
-import { StyleSheet, Text, View } from "react-native";
+import { View } from "react-native";
 import React from "react";
 import componentStyles from "./CustomCardContainer.styles";
 import { styles } from "@utils/styles";
-interface CustomCardContainerProps {
+interface ICustomCardContainer {
   children: React.ReactNode;
 }
 
-const CustomCardContainer: React.FC<CustomCardContainerProps> = ({
-  children,
-}) => {
+const CustomCardContainer: React.FC<ICustomCardContainer> = ({ children }) => {
   return (
     <View
       testID="custom-card-container"
