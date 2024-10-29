@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import RecordingScreen from "./src/screens/RecordingScreen/RecordingScreen";
 import { LogBox } from "react-native";
 
@@ -10,9 +10,11 @@ LogBox.ignoreLogs(["new NativeEventEmitter"]);
 
 const Layout: React.FC = () => {
   return (
-    <SafeAreaView style={styles.container}>
-      <RecordingScreen />
-    </SafeAreaView>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
+        <RecordingScreen />
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 };
 
