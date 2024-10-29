@@ -68,5 +68,9 @@
     <string>Light</string>
     <key>UIViewControllerBasedStatusBarAppearance</key>
     <false/>
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>recognize speech</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>enter a speech</string>
   </dict>
 </plist>
