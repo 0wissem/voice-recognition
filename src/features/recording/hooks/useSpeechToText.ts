@@ -3,6 +3,7 @@ import Voice, {
   SpeechResultsEvent,
   SpeechErrorEvent,
 } from "@react-native-voice/voice";
+import { requestAudioPermission } from "@utils/helpers/permissions.helpers";
 
 // Define a type for the hook's return value
 interface IUseSpeechToText {
@@ -57,6 +58,10 @@ export default function useSpeechToText(): IUseSpeechToText {
 
   const startRecording = useCallback(async () => {
     try {
+      const hasPermission = await requestAudioPermission();
+      if (!hasPermission) {
+        return;
+      }
       setRecognizedText("");
       setError(null);
       await Voice.start("en-US");
