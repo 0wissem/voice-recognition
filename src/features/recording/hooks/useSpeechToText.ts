@@ -3,7 +3,7 @@ import Voice, {
   SpeechResultsEvent,
   SpeechErrorEvent,
 } from "@react-native-voice/voice";
-import { requestAudioPermission } from "@utils/helpers/permissions.helpers";
+import { requestAudioPermission } from "@features/recording/utils/helpers/permissions.helpers";
 
 // Define a type for the hook's return value
 interface IUseSpeechToText {
