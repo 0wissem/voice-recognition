@@ -18,5 +18,6 @@ export default StyleSheet.create({
     textAlign: "center",
     fontSize: 16,
     color: colors.WHITE,
+    textTransform: "capitalize",
   },
 });

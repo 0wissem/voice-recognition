@@ -13,10 +13,12 @@ export default StyleSheet.create({
     fontSize: 14,
     color: colors.TEXT_PARAGRAPH,
     textAlign: "center",
+    textTransform: "capitalize",
   },
   descriptionText: {
     fontSize: 14,
     color: colors.GREY_MEDIUM,
     textAlign: "center",
+    textTransform: "capitalize",
   },
 });
