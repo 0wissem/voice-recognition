@@ -41,6 +41,11 @@ npm install --global expo-cli
     ```bash
     yarn
     ```
+3. patch dependencies:
+
+    ```bash
+    yarn postinstall
+    ```
 
 ## Testing
 
