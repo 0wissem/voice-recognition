@@ -58,7 +58,7 @@ describe("RecordingScreen", () => {
     expect(getByText("global.start")).toBeTruthy();
 
     // Check that the CustomButton renders with the correct initial title
-    expect(getByText("recording.start_your_speech")).toBeTruthy();
+    expect(getByText("recording.introduction")).toBeTruthy();
   });
 
   it("displays recognized text with ellipsis when isListening is true", () => {

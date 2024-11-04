@@ -24,7 +24,7 @@ const RecordingScreen: React.FC = () => {
     <View style={styles.container}>
       <SpeechTextDisplayCard
         recognizedText={_recognizedText}
-        placeholder={translate("recording.start_your_speech")}
+        placeholder={translate("recording.introduction")}
       />
       <CustomButton onPress={onToggleRecording} title={buttonTitle} />
     </View>

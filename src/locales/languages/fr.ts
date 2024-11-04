@@ -3,7 +3,9 @@ const fr = {
     start: "commencer",
     stop: "arreter",
   },
-  recording: { start_your_speech: "commencer votre discours" },
+  recording: {
+    introduction: "commencez votre discours en cliquant sur le bouton",
+  },
   errors: {
     error: "Error",
     errorOccured: "Une erreur s'est produite",
