@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Voice, {
   SpeechResultsEvent,
   SpeechErrorEvent,
@@ -6,6 +6,8 @@ import Voice, {
 import { requestAudioPermission } from "@features/recording/utils/helpers/permissions.helpers";
 import { translate } from "@locales/i18n";
 import { systemLanguage } from "@utils/helpers/language.helpers";
+import { VOICE_SETTINGS } from "../utils/helpers/constants";
+import { IS_IOS } from "@utils/constants";
 
 // Define a type for the hook's return value
 interface IUseSpeechToText {
@@ -20,11 +22,14 @@ export default function useSpeechToText(): IUseSpeechToText {
   const [isListening, setIsListening] = useState<boolean>(false);
   const [recognizedText, setRecognizedText] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+  // We have introduced three references to manage the speech text.
+  const previousTextToPrependRef = useRef<string>("");
+  const lastResultRef = useRef<string>("");
+  const inputTextRef = useRef<string>("");
 
   useEffect(() => {
     Voice.onSpeechStart = onSpeechStart;
     Voice.onSpeechEnd = onSpeechEnd;
-    Voice.onSpeechResults = onSpeechResults;
     Voice.onSpeechError = onSpeechError;
     Voice.onSpeechPartialResults = onSpeechPartialResults;
 
@@ -38,19 +43,21 @@ export default function useSpeechToText(): IUseSpeechToText {
   };
 
   const onSpeechEnd = (): void => {
-    setIsListening(false);
-  };
-
-  const onSpeechPartialResults = (event: SpeechResultsEvent) => {
-    if (event.value && event.value.length > 0) {
-      setRecognizedText(event.value[0]);
+    if (IS_IOS) {
+      setIsListening(false);
     }
+    return;
   };
-
-  const onSpeechResults = (event: SpeechResultsEvent) => {
-    if (event.value && event.value.length > 0) {
-      setRecognizedText(event.value[0]);
+  // we used refs here, The issue is that when the user stops speaking, the onSpeechPartialResults event only returns the newly detected text (after the mute). To address this, we need to store all detected text segments in different ways, allowing us to handle new text results and concatenate them with a stored reference, inputTextRef, which holds the complete text.
+  const onSpeechPartialResults = (e: SpeechResultsEvent) => {
+    if (e.value && !e.value[0].startsWith?.(lastResultRef.current)) {
+      previousTextToPrependRef.current = inputTextRef.current;
     }
+    if (e.value && e.value.length > 0) {
+      inputTextRef.current = previousTextToPrependRef.current + e.value[0];
+      lastResultRef.current = e.value[0];
+    }
+    setRecognizedText(inputTextRef.current);
   };
 
   const onSpeechError = (event: SpeechErrorEvent) => {
@@ -66,7 +73,11 @@ export default function useSpeechToText(): IUseSpeechToText {
       }
       setRecognizedText("");
       setError(null);
-      await Voice.start(systemLanguage);
+      // we clean refs each time we start a new recording.
+      previousTextToPrependRef.current = "";
+      lastResultRef.current = "";
+      inputTextRef.current = "";
+      await Voice.start(systemLanguage, VOICE_SETTINGS);
       setIsListening(true);
     } catch (err) {
       setError(
