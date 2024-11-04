@@ -8,7 +8,8 @@
       "@assets/*": ["assets/*"],
       "@screens/*": ["screens/*"],
       "@utils/*": ["utils/*"],
-      "@features/*": ["features/*"]
+      "@features/*": ["features/*"],
+      "@locales/*": ["locales/*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx"],

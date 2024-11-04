@@ -17,6 +17,21 @@ jest.mock("@react-native-voice/voice", () => ({
   destroy: jest.fn(),
   removeAllListeners: jest.fn(),
 }));
+
+jest.mock("i18next", () => ({
+  createInstance: jest.fn(() => ({
+    use: jest.fn().mockReturnThis(),
+    init: jest.fn().mockReturnValue(Promise.resolve()),
+    t: jest.fn((str) => str),
+  })),
+}));
+
+jest.mock("react-i18next", () => ({
+  initReactI18next: {
+    init: jest.fn(),
+  },
+}));
+
 describe("RecordingScreen", () => {
   const mockStartRecording = jest.fn();
   const mockStopRecording = jest.fn();
@@ -40,10 +55,10 @@ describe("RecordingScreen", () => {
     const { getByText } = render(<RecordingScreen />);
 
     // Check that SpeechTextDisplayCard renders with the correct placeholder
-    expect(getByText("Start your speech")).toBeTruthy();
+    expect(getByText("global.start")).toBeTruthy();
 
     // Check that the CustomButton renders with the correct initial title
-    expect(getByText("Start")).toBeTruthy();
+    expect(getByText("recording.start_your_speech")).toBeTruthy();
   });
 
   it("displays recognized text with ellipsis when isListening is true", () => {
@@ -61,13 +76,13 @@ describe("RecordingScreen", () => {
     // Check that the recognized text is displayed with ellipsis
     expect(getByText("Hello...")).toBeTruthy();
     // Check that the button title changes to "Stop"
-    expect(getByText("Stop")).toBeTruthy();
+    expect(getByText("global.stop")).toBeTruthy();
   });
 
   it("calls startRecording when button is pressed and isListening is false", () => {
     const { getByText } = render(<RecordingScreen />);
 
-    const startButton = getByText("Start");
+    const startButton = getByText("global.start");
     fireEvent.press(startButton);
 
     expect(mockStartRecording).toHaveBeenCalled();
@@ -84,7 +99,7 @@ describe("RecordingScreen", () => {
 
     const { getByText } = render(<RecordingScreen />);
 
-    const stopButton = getByText("Stop");
+    const stopButton = getByText("global.stop");
     fireEvent.press(stopButton);
 
     expect(mockStopRecording).toHaveBeenCalled();

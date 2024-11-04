@@ -4,6 +4,8 @@ import Voice, {
   SpeechErrorEvent,
 } from "@react-native-voice/voice";
 import { requestAudioPermission } from "@features/recording/utils/helpers/permissions.helpers";
+import { translate } from "@locales/i18n";
+import { systemLanguage } from "@utils/helpers/language.helpers";
 
 // Define a type for the hook's return value
 interface IUseSpeechToText {
@@ -31,11 +33,11 @@ export default function useSpeechToText(): IUseSpeechToText {
     };
   }, []);
 
-  const onSpeechStart = () => {
+  const onSpeechStart = (): void => {
     setIsListening(true);
   };
 
-  const onSpeechEnd = () => {
+  const onSpeechEnd = (): void => {
     setIsListening(false);
   };
 
@@ -52,11 +54,11 @@ export default function useSpeechToText(): IUseSpeechToText {
   };
 
   const onSpeechError = (event: SpeechErrorEvent) => {
-    setError(event.error?.message || "An error occurred");
+    setError(event.error?.message || translate("errors.errorOccured"));
     setIsListening(false);
   };
 
-  const startRecording = useCallback(async () => {
+  const startRecording = useCallback(async (): Promise<void> => {
     try {
       const hasPermission = await requestAudioPermission();
       if (!hasPermission) {
@@ -64,20 +66,24 @@ export default function useSpeechToText(): IUseSpeechToText {
       }
       setRecognizedText("");
       setError(null);
-      await Voice.start("en-US");
+      await Voice.start(systemLanguage);
       setIsListening(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+      setError(
+        err instanceof Error ? err.message : translate("errors.errorOccured")
+      );
       console.error("Error starting voice recognition:", err);
     }
   }, []);
 
-  const stopRecording = useCallback(async () => {
+  const stopRecording = useCallback(async (): Promise<void> => {
     try {
       await Voice.stop();
       setIsListening(false);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
+      setError(
+        err instanceof Error ? err.message : translate("errors.errorOccured")
+      );
       console.error("Error stopping voice recognition:", err);
     }
   }, []);
